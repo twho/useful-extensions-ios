@@ -12,7 +12,7 @@ extension UIView {
     /**
      The getter of the height constraint of the view.
      */
-    var heightConstraint: NSLayoutConstraint? {
+    public var heightConstraint: NSLayoutConstraint? {
         get {
             return constraints.first(where: {
                 $0.firstAttribute == .height && $0.relation == .equal
@@ -22,69 +22,12 @@ extension UIView {
     /**
      The getter of the width constraint of the view.
      */
-    var widthConstraint: NSLayoutConstraint? {
+    public var widthConstraint: NSLayoutConstraint? {
         get {
             return constraints.first(where: {
                 $0.firstAttribute == .width && $0.relation == .equal
             })
         }
-    }
-    /**
-     Initialize a view with background color.
-     
-     - Parameter color: The background color.
-     */
-    public convenience init(color: UIColor) {
-        self.init()
-        self.backgroundColor = color
-    }
-    /**
-     Set the corner border of the view.
-     
-     - Parameter color: The color of the border.
-     - Parameter cornerRadius: The corner radius of the view and the border.
-     - Parameter borderWidth: The border width.
-     */
-    public func setCornerBorder(color: UIColor? = nil, cornerRadius: CGFloat = 12.0, borderWidth: CGFloat = 1.5) {
-        self.layer.borderColor = color != nil ? color!.cgColor : UIColor.clear.cgColor
-        self.layer.borderWidth = borderWidth
-        self.layer.cornerRadius = cornerRadius
-        self.clipsToBounds = true
-    }
-    /**
-     Make circular view.
-     
-     - Parameter color: The background color of the view.
-     - Parameter borderWidth: The border width of the view.
-     */
-    public func setCircular(color: UIColor? = nil, borderWidth: CGFloat = 5.0) {
-        self.setCornerBorder(color: color, cornerRadius: self.frame.width/2, borderWidth: borderWidth)
-        self.layoutIfNeeded()
-    }
-    /**
-     Remove all subviews from the current view.
-     */
-    public func removeSubviews() {
-        self.subviews.forEach {
-            $0.removeFromSuperview()
-        }
-    }
-    /**
-     Blur the border of the current view.
-     
-     - Parameter shadowRadius: The shadow radius of the view.
-     - Parameter inset:        The inset of the bounds of the shadow.
-     - Parameter corner:       The corner radius of the border.
-     */
-    public func setBlurredBorder(shadowRadius: CGFloat = 15.0, inset: CGFloat = 10, corner: CGFloat = 10) {
-        let maskLayer = CAGradientLayer()
-        maskLayer.frame = self.bounds
-        maskLayer.shadowRadius = shadowRadius
-        maskLayer.shadowPath = CGPath(roundedRect: self.bounds.insetBy(dx: inset, dy: inset), cornerWidth: corner, cornerHeight: corner, transform: nil)
-        maskLayer.shadowOpacity = 0.7
-        maskLayer.shadowOffset = CGSize.zero
-        maskLayer.shadowColor = UIColor.white.cgColor
-        self.layer.mask = maskLayer
     }
     /**
      Set the anchors of current view. Make it align to the anchors of other views.
@@ -166,15 +109,23 @@ extension UIView {
         )
     }
     /**
-     Make Square view using layout constraints.
+     Make Square view using width layout constraint as a reference.
      */
-    public func setSquareUsingWidthReference() {
-        if self.heightConstraint != nil {
-            self.heightConstraint?.isActive = false
-        }
+    public func setSquareBasedOnWidth() {
+        self.heightConstraint?.isActive = false
         NSLayoutConstraint(item: self, attribute: .height,
                            relatedBy: .equal,
                            toItem: self, attribute: .width,
+                           multiplier: 1.0, constant: 0.0).isActive = true
+    }
+    /**
+     Make Square view using height layout constraint as a reference.
+     */
+    public func setSquareBasedOnHeight() {
+        self.widthConstraint?.isActive = false
+        NSLayoutConstraint(item: self, attribute: .width,
+                           relatedBy: .equal,
+                           toItem: self, attribute: .height,
                            multiplier: 1.0, constant: 0.0).isActive = true
     }
     /**
@@ -183,9 +134,7 @@ extension UIView {
      - Parameter height: The height as constant in CGFloat to set to layout constraint.
      */
     public func setHeightConstraint(_ height: CGFloat) {
-        if self.heightConstraint != nil {
-            self.heightConstraint?.isActive = false
-        }
+        self.heightConstraint?.isActive = false
         NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: height).isActive = true
     }
     /**
@@ -194,9 +143,7 @@ extension UIView {
      - Parameter width: The width as constant in CGFloat to set to layout constraint.
      */
     public func setWidthConstraint(_ width: CGFloat) {
-        if self.widthConstraint != nil {
-            self.widthConstraint?.isActive = false
-        }
+        self.widthConstraint?.isActive = false
         NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: width).isActive = true
     }
     /**
@@ -212,6 +159,55 @@ extension UIView {
         )
     }
     /**
+     Initialize a view with background color.
+     
+     - Parameter color: The background color.
+     */
+    public convenience init(color: UIColor) {
+        self.init()
+        self.backgroundColor = color
+    }
+    /**
+     Set the corner border of the view.
+     
+     - Parameter color: The color of the border.
+     - Parameter cornerRadius: The corner radius of the view and the border.
+     - Parameter borderWidth: The border width.
+     */
+    public func setCornerBorder(color: UIColor? = nil, cornerRadius: CGFloat = 12.0, borderWidth: CGFloat = 1.5) {
+        self.layer.borderColor = color != nil ? color!.cgColor : UIColor.clear.cgColor
+        self.layer.borderWidth = borderWidth
+        self.layer.cornerRadius = cornerRadius
+        self.clipsToBounds = true
+    }
+    /**
+     Make circular view.
+     
+     - Parameter color: The background color of the view.
+     - Parameter borderWidth: The border width of the view.
+     */
+    public func setCircular(color: UIColor? = nil, borderWidth: CGFloat = 5.0) {
+        self.setCornerBorder(color: color, cornerRadius: self.frame.width/2, borderWidth: borderWidth)
+        self.layoutIfNeeded()
+    }
+    /**
+     Blur the border of the current view.
+     
+     - Parameter shadowRadius: The shadow radius of the view.
+     - Parameter inset:        The inset of the bounds of the shadow.
+     - Parameter corner:       The corner radius of the border.
+     */
+    public func setBlurredBorder(shadowRadius: CGFloat = 15.0, inset: CGFloat = 10, corner: CGFloat = 10) {
+        let maskLayer = CAGradientLayer()
+        maskLayer.frame = self.bounds
+        maskLayer.shadowRadius = shadowRadius
+        maskLayer.shadowPath = CGPath(roundedRect: self.bounds.insetBy(dx: inset, dy: inset), cornerWidth: corner, cornerHeight: corner, transform: nil)
+        maskLayer.shadowOpacity = 0.7
+        maskLayer.shadowOffset = CGSize.zero
+        maskLayer.shadowColor = UIColor.white.cgColor
+        self.layer.mask = maskLayer
+    }
+    /**
      Add subviews and make it prepared for AutoLayout.
      
      - Parameter views: The views to be added as subviews of current view.
@@ -221,6 +217,14 @@ extension UIView {
             self.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         })
+    }
+    /**
+     Remove all subviews from the current view.
+     */
+    public func removeSubviews() {
+        self.subviews.forEach {
+            $0.removeFromSuperview()
+        }
     }
     /**
      Make self appear as a shadow view.

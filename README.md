@@ -19,41 +19,17 @@ public func setThumbImage(_ image: UIImage?)
 ```
 ### NSLayoutConstraint
 ```swift
-func changeConstant(_ constant: CGFloat)
+public func changeConstant(_ constant: CGFloat)
 ```
 ### StringProtocol
 ```swift
-func index(of string: Self, options: String.CompareOptions = []) -> Index?
+public func index(of string: Self, options: String.CompareOptions = []) -> Index?
 ```
 ### UILabel
 ```swift
 public convenience init(title: String, size: CGFloat, bold: Bool = true, color: UIColor, numOfLines: Int = 1, alignment: NSTextAlignment = .center)
 ```
-## UIButton
-```swift
-public func setImage(_ image: UIImage?)
-
-public func setTitle(_ text: String?)
-
-public func setTitleImageSpacing(spacing: CGFloat, imgPadding: CGFloat = 0.0)
-```
-## UIColor
-```swift
-public func getColorTint() -> UIColor
-```
-## UIImage
-```swift
-public convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1))
-
-public func colored(_ color: UIColor?) -> UIImage?
-```
-## UIStackView
-```swift
-public convenience init(arrangedSubviews: [UIView]? = nil, axis: NSLayoutConstraint.Axis, distribution: UIStackView.Distribution, spacing: CGFloat)
-
-public func removeAllSubviews()
-```
-## UIView
+### UIView
 ```swift
 public var heightConstraint: NSLayoutConstraint? { get }
 
@@ -93,7 +69,31 @@ public func getZeroHeightConstraint(attachToView: UIView) -> NSLayoutConstraint
 
 public func addGestureRecognizers(_ recognizers: [UIGestureRecognizer], _ delegate: UIGestureRecognizerDelegate)
 ```
-## UIViewController
+### UIButton
+```swift
+public func setImage(_ image: UIImage?)
+
+public func setTitle(_ text: String?)
+
+public func setTitleImageSpacing(spacing: CGFloat, imgPadding: CGFloat = 0.0)
+```
+### UIColor
+```swift
+public func getColorTint() -> UIColor
+```
+### UIImage
+```swift
+public convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1))
+
+public func colored(_ color: UIColor?) -> UIImage?
+```
+### UIStackView
+```swift
+public convenience init(arrangedSubviews: [UIView]? = nil, axis: NSLayoutConstraint.Axis, distribution: UIStackView.Distribution, spacing: CGFloat)
+
+public func removeAllSubviews()
+```
+### UIViewController
 ```swift
 public func hideKeyboardWhenTappedAround()
 

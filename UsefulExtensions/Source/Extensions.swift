@@ -64,7 +64,7 @@ extension NSLayoutConstraint {
     /**
      Change the constant of the NSLayoutConstraint.
      */
-    func changeConstant(_ constant: CGFloat) {
+    public func changeConstant(_ constant: CGFloat) {
         self.constant = constant
         self.isActive = true
     }
@@ -72,7 +72,7 @@ extension NSLayoutConstraint {
 // MARK: - StringProtocol
 extension StringProtocol {
     
-    func index(of string: Self, options: String.CompareOptions = []) -> Index? {
+    public func index(of string: Self, options: String.CompareOptions = []) -> Index? {
         return range(of: string, options: options)?.lowerBound
     }
 }
