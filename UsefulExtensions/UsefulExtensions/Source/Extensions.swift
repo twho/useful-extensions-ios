@@ -2,7 +2,8 @@
 //  UIApplication+Extensions.swift
 //  UsefulExtensions
 //
-//  Created by Ho, Tsung Wei on 8/1/19.
+//  Created by Michael Ho on 8/1/19.
+//  Updated by Michael Ho on 11/23/20.
 //  Copyright © 2019 Ho, Tsungwei. All rights reserved.
 //
 
@@ -85,13 +86,15 @@ extension UILabel {
      - Parameter bold:       Specify the font of the label.
      - Parameter color:      The text color of the label.
      - Parameter numOfLines: The number of lines to display using the label.
+     - Parameter alignment:  Text alignment. Default is set to center.
      */
-    public convenience init(title: String, size: CGFloat, bold: Bool = true, color: UIColor, numOfLines: Int = 1) {
+    public convenience init(title: String, size: CGFloat, bold: Bool = true, color: UIColor, numOfLines: Int = 1, alignment: NSTextAlignment = .center) {
         self.init()
         self.font = bold ? UIFont.systemFont(ofSize: size, weight: .bold) : UIFont.systemFont(ofSize: size, weight: .light)
         self.numberOfLines = numOfLines
         self.text = title
         self.textColor = color
         self.lineBreakMode = .byTruncatingTail
+        self.textAlignment = alignment
     }
 }
