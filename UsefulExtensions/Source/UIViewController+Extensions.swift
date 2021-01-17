@@ -11,12 +11,24 @@ import UIKit
 
 extension UIViewController {
     /**
+     A boolean indicate whether the view is currently visible.
+     */
+    public var isViewVisible: Bool {
+        return self.isViewLoaded && self.view.window != nil
+    }
+    /**
      Hide keyboard when tapping the parent view under current view controller.
      */
     public func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+    /**
+     Get a cell reuse identifier tied with the class name.
+     */
+    public var cellReuseIdentifier: String {
+        return String(describing: self) + "TableViewCell"
     }
     /**
      Dismiss keyboard.
@@ -57,15 +69,10 @@ extension UIViewController {
      - Returns: A navigation bar that is added to the view controller.
      */
     public func addNavigationBar(title: String, leftBarItem: UIBarButtonItem? = nil, rightBarItem: UIBarButtonItem? = nil,
-                                 titleColor: UIColor = .white, backgroundColor: UIColor = .black) -> UINavigationBar {
+                                 titleColor: UIColor = .label, backgroundColor: UIColor = .secondarySystemBackground) -> UINavigationBar {
         // Accomodate iOS 13 API for status bar height.
         let window = UIApplication.shared.windows[0]
-        var statusBarHeight: CGFloat = 0.0
-        if #available(iOS 13.0, *) {
-            statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-        } else {
-            statusBarHeight = UIApplication.shared.statusBarFrame.height
-        }
+        var statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         // Apply safe areas to the navigation bar.
         statusBarHeight = max(statusBarHeight, window.safeAreaInsets.top)
         // Set up navigation bar.
@@ -73,20 +80,19 @@ extension UIViewController {
         navbar.barTintColor = backgroundColor
         navbar.backgroundColor = backgroundColor
         navbar.isTranslucent = false
+        // Remove lines in navigation bar
+        navbar.shadowImage = UIImage()
         // Set up navigation bar items.
         let navItem = UINavigationItem()
-        let titleLabel = UILabel(title: title, size: 20.0, color: .white)
+        let titleLabel = UILabel(title: title, size: 20.0, color: titleColor)
         titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.textColor = titleColor
         navbar.tintColor = titleColor
         navItem.titleView = titleLabel
         navItem.leftBarButtonItem = leftBarItem
         navItem.rightBarButtonItem = rightBarItem
         navbar.items = [navItem]
         // Set up background view
-        let view = UIView()
-        view.backgroundColor = backgroundColor
-        
+        let view = UIView(color: backgroundColor)
         // Navigation is well defined, no need to set translating auto mask
         self.view.addSubview(navbar)
         self.view.addSubViews([view])
@@ -98,32 +104,22 @@ extension UIViewController {
      Dismiss current view.
      */
     @objc public func backToPreviousVC() {
-        self.modalPresentationStyle = .custom
         self.dismiss(animated: true, completion: nil)
     }
-}
-
-extension UIViewController: UIViewControllerTransitioningDelegate {
-    /**
-     Go to other view controllers with custom animation.
-     
-     - Parameter view: The destination view controller.
-     */
-    public func goToView(_ view: UIViewController, completion: (() -> Void)? = nil) {
-        view.transitioningDelegate = self
-        view.modalPresentationStyle = .custom
-        self.present(view, animated: true, completion: nil)
+    
+    public func presentInFullscreen(_ vc: UIViewController, _ animated: Bool = true) {
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
     }
     /**
      Load view with animation. The background will be loaded before the primary views.
      
-     - Parameter loadFunc: The loading function used to load primary views.
+     - Parameter function:   The function to rnu within the animation block.
+     - Parameter completion: The completion handler.
      */
-    public func loadViewWithAnimation(loadFunc: @escaping (()->())) {
-        UIView.animate(withDuration: 0.2, delay: 0.0, options: [.transitionCrossDissolve], animations: {
-            self.view.backgroundColor = .white
-        }, completion: { _ in
-            loadFunc()
-        })
+    public func runInAnimation(_ function: @escaping (()->()), completion: ((Bool) -> Void)? = nil) {
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            function()
+        }, completion: completion)
     }
 }

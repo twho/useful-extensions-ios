@@ -111,22 +111,38 @@ extension UIView {
     /**
      Make Square view using width layout constraint as a reference.
      */
-    public func setSquareBasedOnWidth() {
-        self.heightConstraint?.isActive = false
-        NSLayoutConstraint(item: self, attribute: .height,
-                           relatedBy: .equal,
-                           toItem: self, attribute: .width,
-                           multiplier: 1.0, constant: 0.0).isActive = true
+    public func setSquareUseWidthReference() {
+        setHeightByAspectRatio(1.0)
     }
     /**
      Make Square view using height layout constraint as a reference.
      */
-    public func setSquareBasedOnHeight() {
+    public func setSquarUseHeightReference() {
+        setWidthByAspectRatio(1.0)
+    }
+    /**
+     Set the view width based on input aspect ratio (width / height).
+     
+     - Parameter ratio: The reference aspect ratio.
+     */
+    public func setWidthByAspectRatio(_ ratio: CGFloat) {
         self.widthConstraint?.isActive = false
         NSLayoutConstraint(item: self, attribute: .width,
                            relatedBy: .equal,
                            toItem: self, attribute: .height,
-                           multiplier: 1.0, constant: 0.0).isActive = true
+                           multiplier: ratio, constant: 0.0).isActive = true
+    }
+    /**
+     Set the view height based on input aspect ratio (width / height).
+     
+     - Parameter ratio: The reference aspect ratio.
+     */
+    public func setHeightByAspectRatio(_ ratio: CGFloat) {
+        self.heightConstraint?.isActive = false
+        NSLayoutConstraint(item: self, attribute: .height,
+                           relatedBy: .equal,
+                           toItem: self, attribute: .width,
+                           multiplier: 1.0/ratio, constant: 0.0).isActive = true
     }
     /**
      The setter of the height constraint of the view.
@@ -235,7 +251,7 @@ extension UIView {
      */
     public func setAsShadow(bounds: CGRect, cornerRadius: CGFloat = 0.0, shadowRadius: CGFloat = 1) {
         self.backgroundColor = UIColor.clear
-        self.layer.shadowColor = UIColor.lightGray.cgColor
+        self.layer.shadowColor = UIColor.secondarySystemBackground.cgColor
         self.layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
         self.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
         self.layer.shadowOpacity = 0.7
@@ -265,5 +281,17 @@ extension UIView {
             $0.delegate = delegate
             self.addGestureRecognizer($0)
         }
+    }
+    /**
+     Add blurry effect to the current view.
+     
+     - Parameter style: The style of blur effect. 
+     */
+    public func addBlurryEffect(_ style: UIBlurEffect.Style = .light) {
+        let blurEffect = UIBlurEffect(style: style)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(blurEffectView)
     }
 }

@@ -10,6 +10,12 @@ import UIKit
 
 extension UIImage {
     /**
+     The aspect ratio of the current image.
+     */
+    public var aspectRatio: CGFloat {
+        return self.size.width / self.size.height
+    }
+    /**
      Create color rectangle as image.
      
      - Parameters:
@@ -55,5 +61,30 @@ extension UIImage {
             return newImage
         }
         return self
+    }
+    /**
+     Determine if the current image is the same as another one.
+     
+     - Parameter anotherImage: The other image to compare to.
+     
+     - Returns: If two images have the same content.
+     */
+    func isContentEqualTo(_ anotherImage: UIImage) -> Bool {
+        return self.pngData() == anotherImage.pngData()
+    }
+    /**
+     Crop the current image to make it width : height == 3 : 1.
+     
+     - Return: An image after cropping.
+     */
+    func cropToWideRatio() -> UIImage? {
+        let width = self.size.width
+        let height = self.size.height
+        let newHeight = width * (1.0/3.0)
+        let cropZone = CGRect(x: 0, y: height / 2 - newHeight / 2, width: width, height: newHeight)
+        guard let cutImageRef: CGImage = self.cgImage?.cropping(to:cropZone) else {
+            return nil
+        }
+        return UIImage(cgImage: cutImageRef)
     }
 }

@@ -14,8 +14,14 @@ extension NSObject {
     /**
      We assume the AppDelegate exists in the entire life cycle of the app.
      */
-    var appDelegate: AppDelegate {
+    var appDelegate: UIApplicationDelegate {
         return (UIApplication.shared.delegate as? AppDelegate).unsafelyUnwrapped
+    }
+    /**
+     The log tag used for debugging. 
+     */
+    public var logtag: String {
+        return String(describing: self) + ": "
     }
 }
 // MARK: - UIApplication
@@ -96,5 +102,16 @@ extension UILabel {
         self.textColor = color
         self.lineBreakMode = .byTruncatingTail
         self.textAlignment = alignment
+    }
+}
+// MARK: - UITableView
+extension UITableView {
+    /**
+     Reload data with animation.
+     */
+    func reloadDataWithAnimation() {
+        let range = NSMakeRange(0, self.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.reloadSections(sections as IndexSet, with: .automatic)
     }
 }
