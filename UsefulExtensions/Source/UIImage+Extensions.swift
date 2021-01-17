@@ -69,7 +69,7 @@ extension UIImage {
      
      - Returns: If two images have the same content.
      */
-    func isContentEqualTo(_ anotherImage: UIImage) -> Bool {
+    public func isContentEqualTo(_ anotherImage: UIImage) -> Bool {
         return self.pngData() == anotherImage.pngData()
     }
     /**
@@ -77,7 +77,7 @@ extension UIImage {
      
      - Return: An image after cropping.
      */
-    func cropToWideRatio() -> UIImage? {
+    public func cropToWideRatio() -> UIImage? {
         let width = self.size.width
         let height = self.size.height
         let newHeight = width * (1.0/3.0)

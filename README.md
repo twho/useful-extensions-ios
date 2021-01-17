@@ -3,7 +3,7 @@
 
 ### NSObject
 ```swift
-var appDelegate: AppDelegate { get }
+var appDelegate: UIApplicationDelegate { get }
 ```
 ### UIApplication
 ```swift
@@ -29,6 +29,10 @@ public func index(of string: Self, options: String.CompareOptions = []) -> Index
 ```swift
 public convenience init(title: String, size: CGFloat, bold: Bool = true, color: UIColor, numOfLines: Int = 1, alignment: NSTextAlignment = .center)
 ```
+### UITableView
+```swift
+public func reloadDataWithAnimation()
+```
 ### UIView
 ```swift
 public var heightConstraint: NSLayoutConstraint? { get }
@@ -41,9 +45,11 @@ public func setConstraintsToView(top: UIView? = nil, tConst: CGFloat = 0, bottom
 
 public func centerSubView(_ view: UIView)
 
-public func setSquareBasedOnWidth()
+public func setSquareUsingWidthReference()
 
-public func setSquareBasedOnHeight()
+public func setSquarUsignHeightReference()
+
+public func setHeightByAspectRatio(_ ratio: CGFloat)
 
 public func setHeightConstraint(_ height: CGFloat)
 
@@ -68,6 +74,8 @@ public func setAsShadow(bounds: CGRect, cornerRadius: CGFloat = 0.0, shadowRadiu
 public func getZeroHeightConstraint(attachToView: UIView) -> NSLayoutConstraint
 
 public func addGestureRecognizers(_ recognizers: [UIGestureRecognizer], _ delegate: UIGestureRecognizerDelegate)
+
+public func addBlurryEffect(_ style: UIBlurEffect.Style = .light)
 ```
 ### UIButton
 ```swift
@@ -86,6 +94,12 @@ public func getColorTint() -> UIColor
 public convenience init?(color: UIColor, size: CGSize = CGSize(width: 1, height: 1))
 
 public func colored(_ color: UIColor?) -> UIImage?
+
+public var aspectRatio: CGFloat
+
+public func isContentEqualTo(_ anotherImage: UIImage) -> Bool
+
+public func cropToWideRatio() -> UIImage?
 ```
 ### UIStackView
 ```swift
@@ -95,11 +109,19 @@ public func removeAllSubviews()
 ```
 ### UIViewController
 ```swift
+public var isViewVisible: Bool { get }
+
+public var cellReuseIdentifier: String { get } 
+
 public func hideKeyboardWhenTappedAround()
 
 public func addKeyboardViewMoveListeners()
 
 public func addNavigationBar(title: String, leftBarItem: UIBarButtonItem? = nil, rightBarItem: UIBarButtonItem? = nil, titleColor: UIColor = .white, backgroundColor: UIColor = .black) -> UINavigationBar
 
-public func loadViewWithAnimation(loadFunc: @escaping (() -> ()))
+@objc public func backToPreviousVC()
+
+public func presentInFullscreen(_ vc: UIViewController, _ animated: Bool = true)
+
+public func runInAnimation(_ function: @escaping (()->()), completion: ((Bool) -> Void)? = nil)
 ```

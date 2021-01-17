@@ -17,18 +17,18 @@ extension UIViewController {
         return self.isViewLoaded && self.view.window != nil
     }
     /**
+     Get a cell reuse identifier tied with the class name.
+     */
+    public var cellReuseIdentifier: String {
+        return String(describing: self) + "TableViewCell"
+    }
+    /**
      Hide keyboard when tapping the parent view under current view controller.
      */
     public func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-    }
-    /**
-     Get a cell reuse identifier tied with the class name.
-     */
-    public var cellReuseIdentifier: String {
-        return String(describing: self) + "TableViewCell"
     }
     /**
      Dismiss keyboard.

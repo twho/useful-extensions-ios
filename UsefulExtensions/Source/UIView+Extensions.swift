@@ -111,13 +111,13 @@ extension UIView {
     /**
      Make Square view using width layout constraint as a reference.
      */
-    public func setSquareUseWidthReference() {
+    public func setSquareUsingWidthReference() {
         setHeightByAspectRatio(1.0)
     }
     /**
      Make Square view using height layout constraint as a reference.
      */
-    public func setSquarUseHeightReference() {
+    public func setSquarUsignHeightReference() {
         setWidthByAspectRatio(1.0)
     }
     /**
